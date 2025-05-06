@@ -40,7 +40,7 @@ class UserService:
         if not user_id:
             raise ValueError("User ID is required")
 
-        user_data = self.user_repo.get_user_with_role_by_user_id(user_id)
+        user_data = self.user_repo.get_user_with_role_by_id(user_id)
         if not user_data:
             raise ValueError(f"User with ID {user_id} not found")
         
@@ -56,6 +56,19 @@ class UserService:
         #     "user_type": user_data[6] or "No role assigned"
         # }
     
+
+    def get_country_code(self, user_id):
+        if not user_id:
+            raise ValueError("User ID is required")
+
+        country = self.user_repo.get_country_by_user_id(user_id)
+        if not country:
+            raise ValueError(f"Country not found for user ID {user_id}")
+        country = country[0][0]
+
+        # return nobel_repo.get_country_code(country)
+        # return {"user_id": user_id, "country_code": country_code}, http.HTTPStatus.OK
+
 
     def add_user(self, data):
         self.check_user_data(data)
