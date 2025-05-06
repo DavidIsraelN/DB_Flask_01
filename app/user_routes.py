@@ -39,6 +39,18 @@ def get_users():
         return {"error": str(e)}, http.HTTPStatus.INTERNAL_SERVER_ERROR
 
 
+# GET - route to get user with role by ID in the URL
+@user_bp.route('/get_user_with_role/<int:user_id>', methods=['GET'])
+def get_user_with_role(user_id):
+    try:
+        return user_service.get_user_with_role(user_id), http.HTTPStatus.OK
+    
+    except ValueError as e:
+        return {"error": str(e)}, http.HTTPStatus.BAD_REQUEST
+    except Exception as e:
+        return {"error": str(e)}, http.HTTPStatus.INTERNAL_SERVER_ERROR
+
+
 # # GET - route to get user by ID in the URL
 # @user_bp.route('/<int:user_id>', methods=['GET'])
 # def get_user(user_id):
