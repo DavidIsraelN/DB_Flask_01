@@ -35,22 +35,25 @@ class UserRepository:
         return self.db.execute_query(query)
 
 
+    def get_user_by_id(self, user_id):
+        query = "SELECT * FROM users WHERE id = %s;"
+        return self.db.execute_query(query, (user_id,)) # (user_id,) is a tuple with one element
+
+
     def add_user(self, first_name, last_name, country, national_id, phone_number):
-        insert_query = "INSERT INTO users (first_name, last_name, country, national_id, phone_number) VALUES (%s, %s, %s, %s, %s)"
-        self.db.execute_query(insert_query, (first_name, last_name, country, national_id, phone_number))
-        return {
-            'first_name': first_name,
-            'last_name': last_name,
-            'country': country,
-            'national_id': national_id,
-            'phone_number': phone_number
-        }
-        # return {'message': 'Data inserted successfully'}, 201
+        query = """
+        INSERT INTO users (first_name, last_name, country, national_id, phone_number)
+        VALUES (%s, %s, %s, %s, %s) RETURNING id;
+        """
+        return self.db.execute_query(query, (first_name, last_name, country, national_id, phone_number))[0][0]
+    
 
-
-    # def get_user_by_id(self, user_id):
-    #     query = "SELECT * FROM users WHERE id = %s;"
-    #     return self.db.execute_query(query, (user_id,))
+    def add_user_role(self, user_id, user_type):
+        query = """
+        INSERT INTO user_role (user_id, user_type)
+        VALUES (%s, %s);
+        """
+        self.db.execute_query(query, (user_id, user_type))
 
 
     # def delete_user(self, user_id):

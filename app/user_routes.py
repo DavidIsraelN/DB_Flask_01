@@ -51,12 +51,30 @@ def get_users():
 
 
 # POST - route to add a new user
-@user_bp.route('', methods=['POST'])
+@user_bp.route('/add_user', methods=['POST'])
 def add_user():
     try:
         print(f"data is: { request.get_json() }")
-        return user_service.add_user(request.get_json())
+        return user_service.add_user(request.get_json()), http.HTTPStatus.CREATED
     
+    except ValueError as e:
+        return {"error": str(e)}, http.HTTPStatus.BAD_REQUEST
+    except Exception as e:
+        return {"error": str(e)}, http.HTTPStatus.INTERNAL_SERVER_ERROR
+
+
+# POST - route to add a new user with a specific role
+@user_bp.route('/add_user_with_role', methods=['POST'])
+def add_user_with_role():
+    """
+    Add a new user with a specific role. request.get_json() should contain user and role.
+    :user: Dictionary containing user data (first_name, last_name, country, national_id, phone_number).
+    :role: The role to assign to the user (e.g., 'student', 'teacher', 'admin').
+    """
+    try:
+        print(f"data is: { request.get_json() }")
+        return user_service.add_user_with_role(request.get_json()), http.HTTPStatus.CREATED
+
     except ValueError as e:
         return {"error": str(e)}, http.HTTPStatus.BAD_REQUEST
     except Exception as e:
