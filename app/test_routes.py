@@ -1,6 +1,6 @@
 import http
 from flask import Blueprint, request
-from .user_service import service_create_user, service_get_all_useres
+from .user_service import UserService
 
 test_route = Blueprint('user_test', __name__)
 
@@ -9,7 +9,7 @@ test_route = Blueprint('user_test', __name__)
 @test_route.route('/test', methods=['GET'])
 def get_user_test():
     try:
-        return service_get_all_useres(), http.HTTPStatus.OK
+        return UserService.get_all_users(), http.HTTPStatus.OK
     
     except Exception as e: 
         return {'error': str(e)}, http.HTTPStatus.INTERNAL_SERVER_ERROR
@@ -20,7 +20,7 @@ def get_user_test():
 def create_user_test():
     try:
         print(f"data is: { request.get_json() }")
-        return service_create_user(request.get_json()), http.HTTPStatus.CREATED
+        return UserService.add_user(request.get_json()), http.HTTPStatus.CREATED
 
     except Exception as e:
         return {'error': str(e)}, http.HTTPStatus.INTERNAL_SERVER_ERROR
