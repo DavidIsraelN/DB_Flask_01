@@ -9,6 +9,10 @@ class UserService:
     def create_user_table(self):
         self.user_repo.create_user_table()
 
+    
+    def create_user_role_table(self):
+        self.user_repo.create_user_role_table()
+
 
     def get_all_users(self):
         return self.user_repo.get_all_users()

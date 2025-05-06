@@ -19,6 +19,17 @@ class UserRepository:
         self.db.execute_query(query)
     
 
+    def create_user_role_table(self):
+        query = """
+        CREATE TABLE IF NOT EXISTS user_role (
+            id SERIAL PRIMARY KEY,
+            user_id INTEGER NOT NULL REFERENCES users(id),
+            user_type VARCHAR(250) NOT NULL CHECK (user_type IN ('student', 'teacher', 'admin'))
+        );
+        """
+        self.db.execute_query(query)
+
+    
     def get_all_users(self):
         query = "SELECT * FROM users"
         return self.db.execute_query(query)
