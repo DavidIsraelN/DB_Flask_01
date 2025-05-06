@@ -9,7 +9,7 @@ class UserRepository:
         query = """
         CREATE TABLE IF NOT EXISTS users (
             id SERIAL PRIMARY KEY,
-            name VARCHAR(250),
+            first_name VARCHAR(250),
             last_name VARCHAR(250),
             country VARCHAR(250),
             national_id VARCHAR(250),
@@ -24,13 +24,15 @@ class UserRepository:
         return self.db.execute_query(query)
 
 
-    def add_user(self, first_name, last_name, email):
-        insert_query = "INSERT INTO users (first_name, last_name, email) VALUES (%s, %s, %s)"
-        self.db.execute_query(insert_query, (first_name, last_name, email))
+    def add_user(self, first_name, last_name, country, national_id, phone_number):
+        insert_query = "INSERT INTO users (first_name, last_name, country, national_id, phone_number) VALUES (%s, %s, %s, %s, %s)"
+        self.db.execute_query(insert_query, (first_name, last_name, country, national_id, phone_number))
         return {
             'first_name': first_name,
             'last_name': last_name,
-            'email': email
+            'country': country,
+            'national_id': national_id,
+            'phone_number': phone_number
         }
         # return {'message': 'Data inserted successfully'}, 201
 
