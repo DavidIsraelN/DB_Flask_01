@@ -1,6 +1,6 @@
 import http
 from flask import Blueprint, request
-from .services import service_create_user, service_get_all_useres
+from .user_service import service_create_user, service_get_all_useres
 
 test_route = Blueprint('user_test', __name__)
 

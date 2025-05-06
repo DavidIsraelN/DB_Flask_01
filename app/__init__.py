@@ -8,5 +8,6 @@ def create_app():
 
     # app.register_blueprint(test_bp, url_prefix='/test')
     app.register_blueprint(test_bp)
+    
 
     return app

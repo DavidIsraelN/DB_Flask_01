@@ -1,4 +1,4 @@
-from .repository import repository_create_user, repository_get_all_users
+from .user_repository import UserRepository
 
 
 def service_get_all_useres():
