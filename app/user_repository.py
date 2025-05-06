@@ -38,6 +38,20 @@ class UserRepository:
     def get_user_by_id(self, user_id):
         query = "SELECT * FROM users WHERE id = %s;"
         return self.db.execute_query(query, (user_id,)) # (user_id,) is a tuple with one element
+    
+
+    def get_user_with_role_by_user_id(self, user_id):
+        query = """
+        SELECT 
+            u.id, u.first_name, u.last_name, u.country, u.national_id, u.phone_number,
+            ur.user_type
+        FROM users u
+        LEFT JOIN user_role ur ON u.id = ur.user_id
+        WHERE u.id = %s;
+        """
+        return self.db.execute_query(query, (user_id,))
+        # print(f"result (type {type(result)}) is: { result }")
+        # return result[0] if result else None
 
 
     def add_user(self, first_name, last_name, country, national_id, phone_number):

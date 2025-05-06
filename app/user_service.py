@@ -24,8 +24,38 @@ class UserService:
         user = self.user_repo.get_user_by_id(user_id)
         if not user:
             raise ValueError("User not found")
-        return user
+        return list(user[0])
+        # user_data = list(user[0])
+        # return {
+        #     "id": user_data[0],
+        #     "first_name": user_data[1],
+        #     "last_name": user_data[2],
+        #     "country": user_data[3],
+        #     "national_id": user_data[4],
+        #     "phone_number": user_data[5],
+        # }
 
+
+    def get_user_with_role(self, user_id):
+        if not user_id:
+            raise ValueError("User ID is required")
+
+        user_data = self.user_repo.get_user_with_role_by_user_id(user_id)
+        if not user_data:
+            raise ValueError(f"User with ID {user_id} not found")
+        
+        return list(user_data[0])
+        # user_data = list(user_data[0])
+        # return {
+        #     "id": user_data[0],
+        #     "first_name": user_data[1],
+        #     "last_name": user_data[2],
+        #     "country": user_data[3],
+        #     "national_id": user_data[4],
+        #     "phone_number": user_data[5],
+        #     "user_type": user_data[6] or "No role assigned"
+        # }
+    
 
     def add_user(self, data):
         self.check_user_data(data)
@@ -60,8 +90,6 @@ class UserService:
         if not new_item_id:
             raise ValueError("Failed to add user")
         
-        # print(f"new_user (type {type(new_user)}) is: { new_user }")
-
         user_role = data.get('role')
         self.user_repo.add_user_role(new_item_id, user_role)
 
