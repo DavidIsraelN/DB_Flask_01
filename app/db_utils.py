@@ -44,13 +44,16 @@ class Database:
             if not self.conn or self.conn.closed:
                 self.connect()
             self.cursor.execute(query, params)
-            if query.strip().upper().startswith("SELECT"):
-                return self.cursor.fetchall()
             self.conn.commit()
+            
+            if query.strip().upper().startswith("SELECT") or "RETURNING" in query.strip().upper():
+                return self.cursor.fetchall()
+        
         except Exception as e:
             print(f"Error executing query: {e}")
             self.conn.rollback()
             raise
+
         finally:
             self.close()  # close the connection after executing the query
 
