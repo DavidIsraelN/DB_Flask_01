@@ -1,4 +1,4 @@
-from .db_utils import Database
+from .db_connection import Database
 
 class UserRepository:
     def __init__(self):
