@@ -1,5 +1,7 @@
 from .user_repository import UserRepository
+from .nobel_service import NobelService
 
+nobel_service = NobelService()
 
 class UserService:
     def __init__(self):
@@ -63,11 +65,9 @@ class UserService:
 
         country = self.user_repo.get_country_by_user_id(user_id)
         if not country:
-            raise ValueError(f"Country not found for user ID {user_id}")
-        country = country[0][0]
+            raise ValueError(f"Country not found for user ID {user_id}. user may not exist.")
 
-        # return nobel_repo.get_country_code(country)
-        # return {"user_id": user_id, "country_code": country_code}, http.HTTPStatus.OK
+        return {"user_id": user_id, "country_code": nobel_service.get_country_code(country[0][0])}
 
 
     def add_user(self, data):
