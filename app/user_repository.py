@@ -40,7 +40,7 @@ class UserRepository:
         return self.db.execute_query(query, (user_id,)) # (user_id,) is a tuple with one element
     
 
-    def get_user_with_role_by_user_id(self, user_id):
+    def get_user_with_role_by_id(self, user_id):
         query = """
         SELECT 
             u.id, u.first_name, u.last_name, u.country, u.national_id, u.phone_number,
@@ -53,6 +53,11 @@ class UserRepository:
         # print(f"result (type {type(result)}) is: { result }")
         # return result[0] if result else None
 
+
+    def get_country_by_user_id(self, user_id):
+        query = "SELECT country FROM users WHERE id = %s;"
+        return self.db.execute_query(query, (user_id,)) # (user_id,) is a tuple with one element
+    
 
     def add_user(self, first_name, last_name, country, national_id, phone_number):
         query = """

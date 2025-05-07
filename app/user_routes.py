@@ -51,6 +51,18 @@ def get_user_with_role(user_id):
         return {"error": str(e)}, http.HTTPStatus.INTERNAL_SERVER_ERROR
 
 
+# GET - route to get country code by user ID in the query string
+@user_bp.route('/get_country_code', methods=['GET'])
+def get_country_code():
+    try:
+        return user_service.get_country_code(request.args.get('user_id')), http.HTTPStatus.OK        
+        
+    except ValueError as e:
+        return {"error": str(e)}, http.HTTPStatus.BAD_REQUEST
+    except Exception as e:
+        return {"error": str(e)}, http.HTTPStatus.INTERNAL_SERVER_ERROR
+
+
 # # GET - route to get user by ID in the URL
 # @user_bp.route('/<int:user_id>', methods=['GET'])
 # def get_user(user_id):
