@@ -78,7 +78,7 @@ def get_country_code():
 @user_bp.route('/add_user', methods=['POST'])
 def add_user():
     try:
-        print(f"data is: { request.get_json() }")
+        # print(f"data is: { request.get_json() }")
         return user_service.add_user(request.get_json()), http.HTTPStatus.CREATED
     
     except ValueError as e:
@@ -96,7 +96,7 @@ def add_user_with_role():
     :role: The role to assign to the user (e.g., 'student', 'teacher', 'admin').
     """
     try:
-        print(f"data is: { request.get_json() }")
+        # print(f"data is: { request.get_json() }")
         return user_service.add_user_with_role(request.get_json()), http.HTTPStatus.CREATED
 
     except ValueError as e:
@@ -109,7 +109,7 @@ def add_user_with_role():
 @user_bp.route('/update_user/<int:user_id>', methods=['PUT'])
 def update_user(user_id):
     try:
-        print(f"user id is: { user_id }\nupdated data is: { request.get_json() }")
+        # print(f"user id is: { user_id }\nupdated data is: { request.get_json() }")
         return user_service.update_user(user_id, request.get_json()), http.HTTPStatus.OK
     
     except ValueError as e:

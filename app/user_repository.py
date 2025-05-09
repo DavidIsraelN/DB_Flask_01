@@ -71,20 +71,11 @@ class UserRepository:
         return self.db.execute_query(query, params)[0][0]
     
 
-    # def add_user(self, first_name, last_name, country, national_id, phone_number):
-    #     query = """
-    #     INSERT INTO users (first_name, last_name, country, national_id, phone_number)
-    #     VALUES (%s, %s, %s, %s, %s) RETURNING id;
-    #     """
-    #     return self.db.execute_query(query, (first_name, last_name, country, national_id, phone_number))[0][0]
-    
-
-    # def add_user_role(self, user_id, user_type):
-    #     query = """
-    #     INSERT INTO user_role (user_id, user_type)
-    #     VALUES (%s, %s);
-    #     """
-    #     self.db.execute_query(query, (user_id, user_type))
+    def update_user(self, user_id, user_updates):
+        set_clause = ", ".join(f"{key} = %s" for key in user_updates.keys())
+        query = f"UPDATE users SET {set_clause} WHERE id = %s"
+        params = list(user_updates.values()) + [user_id]
+        self.db.execute_query(query, params)
 
 
     # def delete_user(self, user_id):

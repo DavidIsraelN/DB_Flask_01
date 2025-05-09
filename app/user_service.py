@@ -111,33 +111,29 @@ class UserService:
     #     self.user_repo.update_user(user_id, updates)
 
 
-
     def update_user(self, user_id, data):
         """
         Update user details and role in the database.
         :param user_id: ID of the user to update.
         :param data: Dictionary containing the fields to update and their new values.
         """
-        # Extract user details and role from the input
-        print(f"in update: {data.items()}")
+        if not user_id:
+            raise ValueError("User ID is required")
+        
         user_updates = {key: value for key, value in data.items() if key in USER_FIELDS}
         role_updates = data.get("role")
-        print(f"user: {user_updates}")
-        print(f"role: {role_updates}")
 
         if not user_updates and not role_updates:
             raise ValueError("No valid fields or role provided for update.")
         
-        # Update user role if provided
         if role_updates:
             self.check_role_data(role_updates)
             self.user_role_repo.update_user_role(user_id, role_updates)
-        print("finish to update role")
 
-        # # Update user details if provided
         if user_updates:
             self.user_repo.update_user(user_id, user_updates)
-        print("finish to update user")
+
+        return self.get_user_with_role(user_id)
 
 
     def check_user_data(self, data):
