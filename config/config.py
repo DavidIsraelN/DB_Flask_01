@@ -1,5 +1,8 @@
 # Configuration constants 
 
+BASE_API_URL = "https://api.nobelprize.org/v1/" 
+URL_COUNTRY = BASE_API_URL + "country.json"
+
 # USER_FIELDS: List of required data fields for user table 
 USER_FIELDS = ["first_name", "last_name", "country", "national_id", "phone_number"]
 

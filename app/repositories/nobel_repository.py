@@ -1,7 +1,5 @@
 import requests
-
-BASE_API_URL = "https://api.nobelprize.org/v1/" 
-URL_COUNTRY = BASE_API_URL + "country.json"
+from config.config import URL_COUNTRY
 
 
 class NobelRepository:
@@ -18,4 +16,3 @@ class NobelRepository:
 
     def fetch_country_data(self):
         return self.fetch_data(URL_COUNTRY)
-

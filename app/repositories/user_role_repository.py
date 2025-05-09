@@ -1,6 +1,6 @@
-from .db_connection import Database
+from ..infrastructure.db_connection import Database
 
-from config import ALLOWED_ROLES, USER_ROLE_FIELDS
+from config.config import ALLOWED_ROLES, USER_ROLE_FIELDS
 
 
 class UserRoleRepository:
@@ -40,7 +40,6 @@ class UserRoleRepository:
         VALUES ({placeholders})
         ON CONFLICT (user_id) DO UPDATE SET user_type = EXCLUDED.user_type;
         """
-        print(query, user_id, user_type)
         self.db.execute_query(query, (user_id, user_type))
 
 
