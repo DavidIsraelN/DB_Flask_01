@@ -1,3 +1,4 @@
+from .user_role_repository import UserRoleRepository
 from .user_repository import UserRepository
 from .nobel_service import NobelService
 from config import USER_FIELDS, ALLOWED_ROLES
@@ -8,6 +9,7 @@ nobel_service = NobelService()
 class UserService:
     def __init__(self):
         self.user_repo = UserRepository()
+        self.user_role_repo = UserRoleRepository()
 
 
     def create_user_table(self):
@@ -15,10 +17,10 @@ class UserService:
 
     
     def create_user_role_table(self):
-        self.user_repo.create_user_role_table()
+        self.user_role_repo.create_user_role_table()
 
 
-    def get_all_users(self):
+    def get_all_users(self):                          # make it dict!!
         return self.user_repo.get_all_users()
         # we can add business logic here if needed like terurn all users sorting by last name and first_name
         # return sorted(self.user_repo.get_all_users(), key=lambda user: (user['last_name'], user['first_name']))
@@ -86,7 +88,7 @@ class UserService:
             raise ValueError("Failed to add user")
         
         user_role = data.get('role')
-        self.user_repo.add_user_role(new_item_id, user_role)
+        self.user_role_repo.add_user_role(new_item_id, user_role)
 
         return self.build_user_dict(["id"] + USER_FIELDS + ["role"], [new_item_id] + list(user_data.values()) + [user_role])
         # return {'id': new_item_id, **user_data, 'role': user_role}
@@ -99,37 +101,43 @@ class UserService:
     #     :param user_id: ID of the user to update.
     #     :param data: Dictionary containing the fields to update and their new values.
     #     """
-    #     allowed_fields = ["first_name", "last_name", "country", "national_id", "phone_number"]
-    #     updates = {key: value for key, value in data.items() if key in allowed_fields}
+    #     print(f"in update: {data.items()}")
+    #     user_updates = {key: value for key, value in data.items() if key in USER_FIELDS}
 
-    #     if not updates:
+    #     print(user_updates)
+    #     if not user_updates:
     #         raise ValueError("No valid fields provided for update.")
-
+    #
     #     self.user_repo.update_user(user_id, updates)
 
 
 
-    # def update_user_and_role(self, user_id, data):
-    #     """
-    #     Update user details and role in the database.
-    #     :param user_id: ID of the user to update.
-    #     :param data: Dictionary containing the fields to update and their new values.
-    #     """
-    #     # Extract user details and role from the input
-    #     allowed_user_fields = ["first_name", "last_name", "country", "national_id", "phone_number"]
-    #     user_updates = {key: value for key, value in data.items() if key in allowed_user_fields}
-    #     role = data.get("role")
+    def update_user(self, user_id, data):
+        """
+        Update user details and role in the database.
+        :param user_id: ID of the user to update.
+        :param data: Dictionary containing the fields to update and their new values.
+        """
+        # Extract user details and role from the input
+        print(f"in update: {data.items()}")
+        user_updates = {key: value for key, value in data.items() if key in USER_FIELDS}
+        role_updates = data.get("role")
+        print(f"user: {user_updates}")
+        print(f"role: {role_updates}")
 
-    #     if not user_updates and not role:
-    #         raise ValueError("No valid fields or role provided for update.")
-
-    #     # Update user details if provided
-    #     if user_updates:
-    #         self.user_repo.update_user(user_id, user_updates)
+        if not user_updates and not role_updates:
+            raise ValueError("No valid fields or role provided for update.")
         
-    #     # Update user role if provided
-    #     if role:
-    #         self.user_role_repo.update_user_role(user_id, role)
+        # Update user role if provided
+        if role_updates:
+            self.check_role_data(role_updates)
+            self.user_role_repo.update_user_role(user_id, role_updates)
+        print("finish to update role")
+
+        # # Update user details if provided
+        if user_updates:
+            self.user_repo.update_user(user_id, user_updates)
+        print("finish to update user")
 
 
     def check_user_data(self, data):
@@ -138,13 +146,17 @@ class UserService:
                 raise ValueError("All fields of user are required")
 
 
+    def check_role_data(self, role):
+        if role not in ALLOWED_ROLES:
+            raise ValueError("Invalid role. Must be 'student', 'teacher', or 'admin'")
+
+
     def check_user_with_role_data(self, data):
         for field in ['user', 'role']:
             if field not in data:
                 raise ValueError("User data and role are required")
         self.check_user_data(data.get('user'))
-        if data.get('role') not in ALLOWED_ROLES:
-            raise ValueError("Invalid role. Must be 'student', 'teacher', or 'admin'")
+        self.check_role_data(data.get('role'))
 
 
     def build_user_dict(self, keys, user_values):

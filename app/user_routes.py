@@ -110,7 +110,7 @@ def add_user_with_role():
 def update_user(user_id):
     try:
         print(f"user id is: { user_id }\nupdated data is: { request.get_json() }")
-        # return user_service.update_user(user_id, request.get_json()), http.HTTPStatus.OK
+        return user_service.update_user(user_id, request.get_json()), http.HTTPStatus.OK
     
     except ValueError as e:
         return {"error": str(e)}, http.HTTPStatus.BAD_REQUEST
