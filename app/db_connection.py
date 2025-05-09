@@ -1,12 +1,13 @@
-import psycopg2
 import os
+import psycopg2 # type: ignore
+# from dotenv import load_dotenv
 
-
-DB_HOST = os.getenv("DB_HOST", "localhost")
-DB_PORT = os.getenv("DB_PORT", "5432")
-DB_NAME = os.getenv("POSTGRES_DB", "david_db")
-DB_USER = os.getenv("POSTGRES_USER", "david")
-DB_PASSWORD = os.getenv("POSTGRES_PASSWORD", "my-password")
+# load_dotenv()
+DB_HOST = os.getenv("DB_HOST")
+DB_PORT = os.getenv("DB_PORT")
+DB_NAME = os.getenv("POSTGRES_DB")
+DB_USER = os.getenv("POSTGRES_USER")
+DB_PASSWORD = os.getenv("POSTGRES_PASSWORD")
 
 
 class Database:
