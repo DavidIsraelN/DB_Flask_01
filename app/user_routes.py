@@ -110,12 +110,13 @@ def add_user_with_role():
 def update_user(user_id):
     try:
         print(f"user id is: { user_id }\nupdated data is: { request.get_json() }")
-        return user_service.update_user(user_id, request.get_json()), http.HTTPStatus.OK
+        # return user_service.update_user(user_id, request.get_json()), http.HTTPStatus.OK
     
     except ValueError as e:
         return {"error": str(e)}, http.HTTPStatus.BAD_REQUEST
     except Exception as e:
         return {"error": str(e)}, http.HTTPStatus.INTERNAL_SERVER_ERROR
+
 
 # # DELETE - route to delete a user by ID in the URL
 # @user_bp.route('/<int:user_id>', methods=['DELETE'])

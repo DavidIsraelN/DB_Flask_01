@@ -1,5 +1,8 @@
 from .db_connection import Database
 
+from config import ALLOWED_ROLES
+
+
 class UserRepository:
     def __init__(self):
         self.db = Database()
@@ -20,11 +23,11 @@ class UserRepository:
     
 
     def create_user_role_table(self):
-        query = """
+        query = f"""
         CREATE TABLE IF NOT EXISTS user_role (
             id SERIAL PRIMARY KEY,
             user_id INTEGER NOT NULL REFERENCES users(id),
-            user_type VARCHAR(250) NOT NULL CHECK (user_type IN ('student', 'teacher', 'admin'))
+            user_type VARCHAR(250) NOT NULL CHECK (user_type IN  {tuple(ALLOWED_ROLES)})
         );
         """
         self.db.execute_query(query)
@@ -49,9 +52,7 @@ class UserRepository:
         LEFT JOIN user_role ur ON u.id = ur.user_id
         WHERE u.id = %s;
         """
-        return self.db.execute_query(query, (user_id,))
-        # print(f"result (type {type(result)}) is: { result }")
-        # return result[0] if result else None
+        return self.db.execute_query(query, (user_id,)) # (user_id,) is a tuple with one element
 
 
     def get_country_by_user_id(self, user_id):
@@ -59,12 +60,23 @@ class UserRepository:
         return self.db.execute_query(query, (user_id,)) # (user_id,) is a tuple with one element
     
 
-    def add_user(self, first_name, last_name, country, national_id, phone_number):
-        query = """
-        INSERT INTO users (first_name, last_name, country, national_id, phone_number)
-        VALUES (%s, %s, %s, %s, %s) RETURNING id;
+    def add_user(self, **user_data):
+        fields = ', '.join(user_data.keys())
+        placeholders = ', '.join(['%s'] * len(user_data))
+        params = tuple(user_data.values())
+        query = f"""
+        INSERT INTO users ({fields})
+        VALUES ({placeholders}) RETURNING id;
         """
-        return self.db.execute_query(query, (first_name, last_name, country, national_id, phone_number))[0][0]
+        return self.db.execute_query(query, params)[0][0]
+    
+
+    # def add_user(self, first_name, last_name, country, national_id, phone_number):
+    #     query = """
+    #     INSERT INTO users (first_name, last_name, country, national_id, phone_number)
+    #     VALUES (%s, %s, %s, %s, %s) RETURNING id;
+    #     """
+    #     return self.db.execute_query(query, (first_name, last_name, country, national_id, phone_number))[0][0]
     
 
     def add_user_role(self, user_id, user_type):
