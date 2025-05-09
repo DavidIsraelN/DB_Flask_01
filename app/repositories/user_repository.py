@@ -1,6 +1,4 @@
-from .db_connection import Database
-
-from config import ALLOWED_ROLES
+from ..infrastructure.db_connection import Database
 
 
 class UserRepository:

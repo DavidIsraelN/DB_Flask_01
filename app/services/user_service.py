@@ -1,7 +1,7 @@
-from .user_role_repository import UserRoleRepository
-from .user_repository import UserRepository
+from repositories.user_role_repository import UserRoleRepository
+from repositories.user_repository import UserRepository
 from .nobel_service import NobelService
-from config import USER_FIELDS, ALLOWED_ROLES
+from config.config import USER_FIELDS, ALLOWED_ROLES
 
 
 nobel_service = NobelService()
