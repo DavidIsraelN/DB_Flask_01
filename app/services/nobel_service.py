@@ -1,4 +1,4 @@
-from repositories.nobel_repository import NobelRepository
+from app.repositories.nobel_repository import NobelRepository
 
 
 class NobelService:

@@ -1,6 +1,6 @@
 import http
 from flask import Blueprint, request
-from services.user_service import UserService
+from app.services.user_service import UserService
 
 user_bp = Blueprint('user', __name__)
 user_service = UserService()
@@ -23,6 +23,17 @@ def create_user_role_table():
     try:
         user_service.create_user_role_table()
         return {"message": "User role table created successfully."}, http.HTTPStatus.CREATED
+    
+    except Exception as e:
+        return {"error": str(e)}, http.HTTPStatus.INTERNAL_SERVER_ERROR
+
+
+# POST - route to create user otp table
+@user_bp.route('/create_user_otp_table', methods=['POST'])
+def create_user_otp_table():
+    try:
+        user_service.create_user_otp_table()
+        return {"message": "User otp table created successfully."}, http.HTTPStatus.CREATED
     
     except Exception as e:
         return {"error": str(e)}, http.HTTPStatus.INTERNAL_SERVER_ERROR
