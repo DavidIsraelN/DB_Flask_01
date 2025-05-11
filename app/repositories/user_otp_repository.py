@@ -1,4 +1,4 @@
-from ..infrastructure.db_connection import Database
+from app.infrastructure.db_connection import Database
 
 # from config.config import ALLOWED_ROLES, USER_ROLE_FIELDS
 

@@ -1,6 +1,7 @@
-from repositories.user_role_repository import UserRoleRepository
-from repositories.user_repository import UserRepository
-from .nobel_service import NobelService
+from app.repositories.user_otp_repository import UserOtpRepository
+from app.repositories.user_role_repository import UserRoleRepository
+from app.repositories.user_repository import UserRepository
+from app.services.nobel_service import NobelService
 from config.config import USER_FIELDS, ALLOWED_ROLES
 
 
@@ -10,6 +11,7 @@ class UserService:
     def __init__(self):
         self.user_repo = UserRepository()
         self.user_role_repo = UserRoleRepository()
+        self.user_otp_repo = UserOtpRepository()
 
 
     def create_user_table(self):
@@ -18,6 +20,10 @@ class UserService:
     
     def create_user_role_table(self):
         self.user_role_repo.create_user_role_table()
+    
+
+    def create_user_otp_table(self):
+        self.user_otp_repo.create_user_otp_table()
 
 
     def get_all_users(self):                          # make it dict!!
