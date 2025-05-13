@@ -1,3 +1,4 @@
+import random
 from app.repositories.user_otp_repository import UserOtpRepository
 from app.repositories.user_role_repository import UserRoleRepository
 from app.repositories.user_repository import UserRepository
@@ -99,6 +100,25 @@ class UserService:
         return self.build_user_dict(["id"] + USER_FIELDS + ["role"], [new_item_id] + list(user_data.values()) + [user_role])
         # return {'id': new_item_id, **user_data, 'role': user_role}
         # return {"user": self.get_user_by_id(str(new_item_id)),"role": user_role}
+
+
+    def add_and_send_otp(self, user_id):
+        """
+        Generates a 6-digit OTP, saves it, and send it to the user's phone number.
+        """
+        if not user_id:
+            raise ValueError("User ID is required")
+
+        user = self.get_user_by_id(user_id)
+        if not user:
+            raise ValueError(f"User {user_id} not found")
+
+        otp = f"{random.randint(0, 999999):06d}"
+        self.user_otp_repo.add_user_otp(user_id, otp)
+
+        # need to send this otp by sms to the phone number of this user
+        # self.sms_repo.send_sms({'to': user['phone_number'], 'message': f"your OTP is {otp}."})
+        return {"message": f"OTP ({otp}) sent to {user['phone_number']}"}
 
 
     # def update_user(self, user_id, data):

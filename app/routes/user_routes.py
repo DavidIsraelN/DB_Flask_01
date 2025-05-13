@@ -129,6 +129,18 @@ def update_user(user_id):
         return {"error": str(e)}, http.HTTPStatus.INTERNAL_SERVER_ERROR
 
 
+# GET - route to send otp to user by ID in the query string
+@user_bp.route('/otp', methods=['GET'])
+def send_otp():
+    try:
+        return user_service.add_and_send_otp(request.args.get('user_id')), http.HTTPStatus.OK
+
+    except ValueError as e:
+        return {"error": str(e)}, http.HTTPStatus.BAD_REQUEST
+    except Exception as e:
+        return {"error": str(e)}, http.HTTPStatus.INTERNAL_SERVER_ERROR
+
+
 # # DELETE - route to delete a user by ID in the URL
 # @user_bp.route('/<int:user_id>', methods=['DELETE'])
 # def delete_user(user_id):
