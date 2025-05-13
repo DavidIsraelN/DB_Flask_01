@@ -35,14 +35,6 @@ class UserOtpRepository:
            """
         self.db.execute_query(query, (user_id, otp))
 
-
-    # def insert_user_otp(self, user_id, otp):
-    #     query = """
-    #     INSERT INTO user_otp (user_id, otp)
-    #     VALUES (%s, %s);
-    #     """
-    #     self.db.execute_query(query, (user_id, otp))
-
     
     # def validate_otp(self, user_id, otp):
     #     query = """
@@ -50,6 +42,20 @@ class UserOtpRepository:
     #     FROM user_otp
     #     WHERE user_id = %s AND otp = %s AND created_at >= NOW() - INTERVAL '5 minutes';
     #     """
-    #     # result = self.db.fetch_one(query, (user_id, otp))
+    #     result = self.db.fetch_one(query, (user_id, otp))
     #     return result[0] > 0
 
+
+    def validate_otp(self, user_id, otp, window_minutes=5):
+        """
+        Returns True if OTP matches and is within the time window.
+        """
+        query = """
+        SELECT COUNT(*)
+        FROM user_otp
+        WHERE user_id = %s
+          AND otp = %s
+          AND created_at >= NOW() - INTERVAL '%s minutes';
+        """
+        result = self.db.execute_query(query, (user_id, otp, window_minutes))
+        return result and result[0][0] > 0

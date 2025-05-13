@@ -119,10 +119,14 @@ def add_user_with_role():
 # PUT - route to update a user
 @user_bp.route('/update_user/<int:user_id>', methods=['PUT'])
 def update_user(user_id):
+    """
+    the JSON body include fields to update and an 'otp' field for verification.
+    """
     try:
         # print(f"user id is: { user_id }\nupdated data is: { request.get_json() }")
-        return user_service.update_user(user_id, request.get_json()), http.HTTPStatus.OK
-    
+        return user_service.update_user_with_otp(user_id, request.get_json()), http.HTTPStatus.OK
+        # return user_service.update_user(user_id, request.get_json()), http.HTTPStatus.OK
+
     except ValueError as e:
         return {"error": str(e)}, http.HTTPStatus.BAD_REQUEST
     except Exception as e:
