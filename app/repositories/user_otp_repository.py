@@ -12,9 +12,10 @@ class UserOtpRepository:
         query = """
         CREATE TABLE IF NOT EXISTS user_otp (
             user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-            otp VARCHAR(50) NOT NULL,
+            otp VARCHAR(10) NOT NULL,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-            PRIMARY KEY (user_id, otp)
+            PRIMARY KEY (user_id, otp),
+            UNIQUE (user_id)
         );
         """
         self.db.execute_query(query)
@@ -25,7 +26,7 @@ class UserOtpRepository:
         Inserts or updates the OTP for a user.
         """
         placeholders = ', '.join(['%s'] * len(USER_OTP_FIELDS))
-        query = """
+        query = f"""
            INSERT INTO user_otp ({', '.join(USER_OTP_FIELDS)})
            VALUES ({placeholders})
            ON CONFLICT (user_id) DO UPDATE

@@ -133,8 +133,7 @@ def update_user(user_id):
 @user_bp.route('/otp', methods=['GET'])
 def send_otp():
     try:
-        otp = user_service.send_otp(request.args.get('user_id'))
-        return {"message": "OTP sent", "otp": otp}, http.HTTPStatus.OK
+        return user_service.add_and_send_otp(request.args.get('user_id')), http.HTTPStatus.OK
 
     except ValueError as e:
         return {"error": str(e)}, http.HTTPStatus.BAD_REQUEST
