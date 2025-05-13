@@ -1,5 +1,5 @@
 import requests
-from config.config import URL_COUNTRY
+from config.config import NOBEL_COUNTRY
 
 
 class NobelRepository:
@@ -15,4 +15,4 @@ class NobelRepository:
 
 
     def fetch_country_data(self):
-        return self.fetch_data(URL_COUNTRY)
+        return self.fetch_data(NOBEL_COUNTRY)
