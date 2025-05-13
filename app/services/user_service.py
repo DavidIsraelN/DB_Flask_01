@@ -162,6 +162,24 @@ class UserService:
         return self.get_user_with_role(user_id)
 
 
+    def update_user_with_otp(self, user_id, data):
+        """
+        Requires `otp` in data, validates it, then updates user & role.
+        """
+        if not user_id:
+            raise ValueError("User ID is required")
+
+        otp = data.get('otp')
+        if not otp:
+            raise ValueError("OTP is required for update")
+
+        if not self.user_otp_repo.validate_otp(user_id, otp):
+            raise ValueError("Invalid or expired OTP")
+
+        data = {k: v for k, v in data.items() if k != 'otp'}
+        return self.update_user(user_id, data)
+
+
     def check_user_data(self, data):
         for field in USER_FIELDS:
             if field not in data:
