@@ -1,6 +1,6 @@
 from app.infrastructure.db_connection import Database
 
-# from config.config import ALLOWED_ROLES, USER_ROLE_FIELDS
+from config.config import USER_OTP_FIELDS
 
 
 class UserOtpRepository:
@@ -19,7 +19,22 @@ class UserOtpRepository:
         """
         self.db.execute_query(query)
 
-    
+
+    def add_user_otp(self, user_id, otp):
+        """
+        Inserts or updates the OTP for a user.
+        """
+        placeholders = ', '.join(['%s'] * len(USER_OTP_FIELDS))
+        query = """
+           INSERT INTO user_otp ({', '.join(USER_OTP_FIELDS)})
+           VALUES ({placeholders})
+           ON CONFLICT (user_id) DO UPDATE
+             SET otp = EXCLUDED.otp,
+                 created_at = CURRENT_TIMESTAMP;
+           """
+        self.db.execute_query(query, (user_id, otp))
+
+
     # def insert_user_otp(self, user_id, otp):
     #     query = """
     #     INSERT INTO user_otp (user_id, otp)

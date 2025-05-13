@@ -7,7 +7,7 @@ sms_service = SmsService()
 
 
 @sms_bp.route('/send_sms', methods=['POST'])
-def send_sms_route():
+def send_sms():
     try:
         print(f"data for sms: {request.get_json()}")
         sid = sms_service.send_sms(request.get_json())
